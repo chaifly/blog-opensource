@@ -1,3 +1,6 @@
+// 区域类型：港股、A股、美股
+export type PostRegion = 'HK' | 'A-shares' | 'US' | null
+
 export interface Post {
   id: number
   slug: string
@@ -6,6 +9,7 @@ export interface Post {
   html: string
   description: string | null
   category: string | null
+  region: string | null // 港股/A股/美股
   tags: string | null
   status: 'draft' | 'published' | 'deleted'
   password: string | null
@@ -16,6 +20,8 @@ export interface Post {
   published_at: number
   updated_at: number
   view_count: number
+  votes_up: number
+  votes_down: number
 }
 
 export interface PostWithTags extends Omit<Post, 'tags'> {

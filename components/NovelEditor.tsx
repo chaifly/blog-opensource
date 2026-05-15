@@ -96,6 +96,7 @@ interface NovelEditorProps {
     title: string
     html: string
     category?: string
+    region?: string
     status?: 'draft' | 'published' | 'deleted'
     password?: string | null
     is_hidden?: number
@@ -109,6 +110,7 @@ type DraftMetaState = {
   editSlug: string | null
   slug: string
   category: string
+  region: string
   tags: string[]
   description: string
   coverImage: string
@@ -130,6 +132,7 @@ export function NovelEditor({ initialData }: NovelEditorProps = {}) {
   const latestTitleRef = useRef('')
   const [charCount, setCharCount] = useState(0)
   const [category, setCategory] = useState(initialData?.category || '未分类')
+  const [region, setRegion] = useState(initialData?.region || '')
   const [publishStatus, setPublishStatus] = useState<PublishStatus>(
     initialData?.status === 'draft' ? 'draft' :
     initialData?.password ? 'encrypted' :
@@ -169,6 +172,7 @@ export function NovelEditor({ initialData }: NovelEditorProps = {}) {
     editSlug: initialData?.slug ?? null,
     slug: initialData?.slug || '',
     category: initialData?.category || '未分类',
+    region: initialData?.region || '',
     tags: initialData?.tags || [],
     description: initialData?.description || '',
     coverImage: initialData?.cover_image || '',
@@ -204,11 +208,12 @@ export function NovelEditor({ initialData }: NovelEditorProps = {}) {
       editSlug,
       slug,
       category,
+      region,
       tags,
       description,
       coverImage,
     }
-  }, [editSlug, slug, category, tags, description, coverImage])
+  }, [editSlug, slug, category, region, tags, description, coverImage])
 
   // Relative time ticker
   useEffect(() => {
@@ -318,6 +323,7 @@ export function NovelEditor({ initialData }: NovelEditorProps = {}) {
     html: string
     description: string
     category: string
+    region: string
     tags: string[]
     coverImage: string
   }) => {
@@ -328,6 +334,7 @@ export function NovelEditor({ initialData }: NovelEditorProps = {}) {
       html: payload.html,
       description: payload.description,
       category: payload.category,
+      region: payload.region,
       tags: payload.tags,
       coverImage: payload.coverImage,
     })
@@ -403,6 +410,7 @@ export function NovelEditor({ initialData }: NovelEditorProps = {}) {
       html,
       description: normalizedDescription,
       category,
+      region,
       tags,
       coverImage,
     })
@@ -774,7 +782,7 @@ export function NovelEditor({ initialData }: NovelEditorProps = {}) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           slug: normalizedSlug || (isEdit ? editSlug : undefined),
-          title: normalizedTitle, content, html, category,
+          title: normalizedTitle, content, html, category, region,
           ...statusFields,
           tags, description: normalizedDescription, cover_image: coverImage || null,
         }),
@@ -796,6 +804,7 @@ export function NovelEditor({ initialData }: NovelEditorProps = {}) {
         html,
         description: (description || buildAutoDescription(content) || '').trim(),
         category,
+        region,
         tags,
         coverImage,
       })
@@ -954,6 +963,35 @@ export function NovelEditor({ initialData }: NovelEditorProps = {}) {
             >
               {sidebarOpen ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
             </button>
+
+            <div className="mx-0.5 h-5 w-px bg-[var(--editor-line)]" />
+
+            {/* Region selector (港股/A股/美股) */}
+            <div className="relative">
+              <select
+                value={region}
+                onChange={(e) => { setRegion(e.target.value); markDirty({ region: e.target.value }) }}
+                className="h-9 w-24 text-sm font-medium rounded-lg border border-[var(--editor-line)] bg-[var(--editor-soft)] text-[var(--editor-ink)] pl-3 pr-8 outline-none cursor-pointer hover:bg-[var(--border-warm)] focus:ring-1 focus:ring-[var(--editor-accent)] transition-colors appearance-none"
+              >
+                <option value="">区域</option>
+                <option value="HK">港股</option>
+                <option value="A-shares">A股</option>
+                <option value="US">美股</option>
+              </select>
+              <svg
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-150"
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 4.5 6 7.5 9 4.5" />
+              </svg>
+            </div>
 
             <div className="mx-0.5 h-5 w-px bg-[var(--editor-line)]" />
 
@@ -1127,6 +1165,7 @@ export function NovelEditor({ initialData }: NovelEditorProps = {}) {
                           html: initialData.html || '',
                           description: (initialData.description || '').trim(),
                           category: initialData.category || '未分类',
+                          region: initialData.region || '',
                           tags: initialData.tags || [],
                           coverImage: initialData.cover_image || '',
                         })

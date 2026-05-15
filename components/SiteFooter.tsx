@@ -51,7 +51,7 @@ export function SiteFooter() {
   return (
     <>
       <footer className="border-t border-[var(--editor-line)] mt-auto">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 flex items-center justify-center gap-2 text-xs text-[var(--stone-gray)]">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-xs text-[var(--stone-gray)]">
           <span>© 2026</span>
           <span>·</span>
           {isAdmin ? (
@@ -86,6 +86,13 @@ export function SiteFooter() {
           )}
         </div>
       </footer>
+
+      {/* 免责声明 */}
+      <div className="border-t border-[var(--editor-line)]/50">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 py-3 text-[10px] text-[var(--editor-muted)] text-center leading-relaxed">
+          本站内容仅为个人投资记录和观点分享，不构成任何投资建议。市场有风险，投资需谨慎。
+        </div>
+      </div>
 
       {/* 密码弹窗 */}
       {open && (

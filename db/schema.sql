@@ -16,7 +16,10 @@ CREATE TABLE posts (
   deleted_at INTEGER, -- 软删除时间戳，NULL 表示未删除
   published_at INTEGER DEFAULT (strftime('%s', 'now')),
   updated_at INTEGER DEFAULT (strftime('%s', 'now')),
-  view_count INTEGER DEFAULT 0
+  view_count INTEGER DEFAULT 0,
+  region TEXT, -- 区域分类：港股(HK)/A股(A-shares)/美股(US)
+  votes_up INTEGER DEFAULT 0, -- 点赞数
+  votes_down INTEGER DEFAULT 0 -- 反对数
 );
 
 -- 索引

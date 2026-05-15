@@ -19,6 +19,7 @@ export async function getPosts(
   includeEncrypted = false,
   includeHidden = false,
   includeDeleted = false,
+  region?: string,
 ): Promise<PostWithTags[]> {
   await ensureSchema(db)
   const conditions: string[] = []
@@ -34,19 +35,26 @@ export async function getPosts(
   if (!includeHidden) {
     conditions.push('is_hidden = 0')
   }
+  if (region) {
+    conditions.push('region = ?')
+  }
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
 
-  const { results } = await db
+  const stmt = db
     .prepare(
-      `SELECT id, slug, title, description, category, tags, status, password, is_pinned, is_hidden, published_at, view_count
+      `SELECT id, slug, title, description, category, region, tags, status, password, is_pinned, is_hidden, published_at, view_count, votes_up, votes_down
        , deleted_at
        FROM posts
        ${where}
        ORDER BY is_pinned DESC, published_at DESC
        LIMIT ? OFFSET ?`,
     )
-    .bind(limit, offset)
-    .all<Post>()
+
+  const bindParams: unknown[] = []
+  if (region) bindParams.push(region)
+  bindParams.push(limit, offset)
+
+  const { results } = await stmt.bind(...bindParams).all<Post>()
 
   return results.map(mapPostWithTags)
 }
@@ -126,20 +134,26 @@ export async function createPost(
     html: string
     description?: string
     category?: string
+    region?: string
     tags?: string[]
     status?: 'draft' | 'published'
     password?: string | null
     is_hidden?: number
     cover_image?: string | null
+    votes_up?: number
+    votes_down?: number
   },
 ): Promise<number> {
   await ensureSchema(db)
   const category = data.category || '未分类'
+  const region = data.region || null
+  const votesUp = data.votes_up ?? 0
+  const votesDown = data.votes_down ?? 0
 
   const result = await db
     .prepare(
-      `INSERT INTO posts (slug, title, content, html, description, category, tags, status, password, is_hidden, cover_image)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO posts (slug, title, content, html, description, category, region, tags, status, password, is_hidden, cover_image, votes_up, votes_down)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       data.slug,
@@ -148,11 +162,14 @@ export async function createPost(
       data.html,
       data.description || null,
       category,
+      region,
       data.tags ? JSON.stringify(data.tags) : null,
       data.status || 'published',
       data.password ?? null,
       data.is_hidden ?? 0,
       data.cover_image ?? null,
+      votesUp,
+      votesDown,
     )
     .run()
 
@@ -212,12 +229,15 @@ export async function updatePost(
     html: string
     description: string
     category: string
+    region: string
     tags: string[]
     status: 'draft' | 'published' | 'deleted'
     password: string | null
     is_pinned: number
     is_hidden: number
     cover_image: string | null
+    votes_up: number
+    votes_down: number
   }>,
 ): Promise<void> {
   await ensureSchema(db)
@@ -287,6 +307,18 @@ export async function updatePost(
     updates.push('cover_image = ?')
     values.push(data.cover_image)
   }
+  if (data.region !== undefined) {
+    updates.push('region = ?')
+    values.push(data.region)
+  }
+  if (data.votes_up !== undefined) {
+    updates.push('votes_up = ?')
+    values.push(data.votes_up)
+  }
+  if (data.votes_down !== undefined) {
+    updates.push('votes_down = ?')
+    values.push(data.votes_down)
+  }
 
   if (updates.length === 0) return
 
@@ -314,6 +346,22 @@ export async function updatePost(
 export async function incrementViewCount(db: Database, slug: string): Promise<void> {
   await db
     .prepare('UPDATE posts SET view_count = view_count + 1 WHERE slug = ?')
+    .bind(slug)
+    .run()
+}
+
+// 增加点赞数
+export async function incrementVotesUp(db: Database, slug: string): Promise<void> {
+  await db
+    .prepare('UPDATE posts SET votes_up = votes_up + 1 WHERE slug = ?')
+    .bind(slug)
+    .run()
+}
+
+// 增加反对数
+export async function incrementVotesDown(db: Database, slug: string): Promise<void> {
+  await db
+    .prepare('UPDATE posts SET votes_down = votes_down + 1 WHERE slug = ?')
     .bind(slug)
     .run()
 }
@@ -355,6 +403,7 @@ export async function getPostsCount(
   includeEncrypted = false,
   includeHidden = false,
   includeDeleted = false,
+  region?: string,
 ): Promise<number> {
   await ensureSchema(db)
   const conditions: string[] = []
@@ -370,9 +419,14 @@ export async function getPostsCount(
   if (!includeHidden) {
     conditions.push('is_hidden = 0')
   }
+  if (region) {
+    conditions.push('region = ?')
+  }
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
   const sql = `SELECT COUNT(*) as count FROM posts ${where}`
-  const result = await db.prepare(sql).first<CountRow>()
+  const result = region
+    ? await db.prepare(sql).bind(region).first<CountRow>()
+    : await db.prepare(sql).first<CountRow>()
   return (result?.count as number) ?? 0
 }
 

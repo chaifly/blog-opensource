@@ -1035,3 +1035,52 @@ body {
     min-width: 0;
   }
 }
+
+/* ══════════════════════════════════════════════════════
+   财经 Blog 功能：股票代码链接 & 图表容器
+   ══════════════════════════════════════════════════════ */
+
+/* 股票代码链接 */
+:is(.novel-prose, .rich-content) a.stock-link {
+  color: var(--editor-accent);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--editor-accent)/8;
+  border: 1px solid var(--editor-accent)/15;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+:is(.novel-prose, .rich-content) a.stock-link:hover {
+  background: var(--editor-accent)/15;
+  border-color: var(--editor-accent)/30;
+  text-decoration: none;
+}
+
+/* 图表容器 */
+.fin-chart-container {
+  margin: 1.5rem 0;
+}
+
+/* 图表占位符（编辑器中） */
+.fin-chart-placeholder {
+  border: 2px dashed var(--editor-line);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  color: var(--editor-muted);
+  margin: 1rem 0;
+  user-select: none;
+}
+
+/* 深色模式下图表 tooltip */
+@media (prefers-color-scheme: dark) {
+  .recharts-tooltip-wrapper .recharts-default-tooltip {
+    background-color: var(--editor-panel) !important;
+    border-color: var(--editor-line) !important;
+  }
+}
+

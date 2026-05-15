@@ -348,6 +348,30 @@ export const suggestionItems = createSuggestionItems([
     },
   },
   {
+    title: '财经图表',
+    description: '插入折线图、柱状图、饼图等财经数据图表。',
+    searchTerms: ['chart', 'graph', '图表', '财经', 'line', 'bar', 'pie'],
+    icon: <CommandIcon label="📊" />,
+    command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range).run()
+      window.dispatchEvent(new CustomEvent<InputModalDetail>(TRIGGER_INPUT_MODAL_EVENT, {
+        detail: {
+          title: '插入财经图表',
+          placeholder: '粘贴图表 JSON 配置（见文档示例）',
+          callback: (jsonStr) => {
+            try {
+              const config = JSON.parse(jsonStr)
+              const html = `<div data-fin-chart='${JSON.stringify(config).replace(/'/g, "\\'")}' class="fin-chart-placeholder" style="border:2px dashed var(--editor-line);border-radius:8px;padding:2rem;text-align:center;color:var(--editor-muted);margin:1rem 0;">📊 ${config.title || config.type + ' chart'}</div>`
+              editor.commands.insertContent(html)
+            } catch {
+              editor.commands.insertContent(`<div data-fin-chart='${jsonStr.replace(/'/g, "\\'")}'>📊 图表</div>`)
+            }
+          },
+        },
+      }))
+    },
+  },
+  {
     title: '上传文件',
     description: '上传视频、音频、PDF、电子书等文件。',
     searchTerms: ['file', 'upload', 'video', 'audio', 'pdf', 'epub', '文件', '视频', '音频', '上传'],

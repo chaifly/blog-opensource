@@ -22,6 +22,10 @@ export async function ensureSchema(db: Database) {
       "ALTER TABLE posts ADD COLUMN is_hidden INTEGER DEFAULT 0",
       "ALTER TABLE posts ADD COLUMN deleted_at INTEGER",
       "ALTER TABLE posts ADD COLUMN cover_image TEXT",
+      // 投资博客增强字段
+      "ALTER TABLE posts ADD COLUMN region TEXT", // 区域：港股/A股/美股
+      "ALTER TABLE posts ADD COLUMN votes_up INTEGER DEFAULT 0", // 点赞数
+      "ALTER TABLE posts ADD COLUMN votes_down INTEGER DEFAULT 0", // 反对数
     ]
     for (const sql of columnMigrations) {
       try {

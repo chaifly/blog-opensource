@@ -37,6 +37,10 @@ binding = "IMAGES"
 
 [vars]
 NEXT_PUBLIC_SITE_URL = "https://your-domain.com"
+# Giscus 评论（基于 GitHub Discussions，可选）
+# NEXT_PUBLIC_GISCUS_REPO = "your-username/your-repo"
+# NEXT_PUBLIC_GISCUS_REPO_ID = "your-repo-id"
+# NEXT_PUBLIC_GISCUS_CATEGORY_ID = "your-category-id"
 AI_BASE_URL = "https://api.openai.com/v1"
 AI_MODEL = "gpt-4o-mini"
 WORKERS_AI_MODEL = "@cf/meta/llama-3.1-8b-instruct"

@@ -1,0 +1,4 @@
+-- 为已有数据库添加财经博客字段
+ALTER TABLE posts ADD COLUMN region TEXT;
+ALTER TABLE posts ADD COLUMN votes_up INTEGER DEFAULT 0;
+ALTER TABLE posts ADD COLUMN votes_down INTEGER DEFAULT 0;

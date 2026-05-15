@@ -9,10 +9,15 @@ import { FrontPostAdminBoundary } from '@/components/FrontPostAdminBoundary'
 import { PasswordPrompt } from '@/components/PasswordPrompt'
 import { DownloadMarkdown } from '@/components/DownloadMarkdown'
 import { TwitterEmbedsEnhancer } from '@/components/TwitterEmbedsEnhancer'
+import { VoteButtons } from '@/components/VoteButtons'
+import { StockTooltip } from '@/components/StockTooltip'
+import { ChartEmbed } from '@/components/ChartEmbed'
+import { GiscusComments } from '@/components/GiscusComments'
 import { getSiteHeaderData } from '@/lib/site'
 import { getRelatedPosts } from '@/lib/related-content'
 import { getPublicContentCacheNamespace } from '@/lib/cache'
 import { getSiteUrl } from '@/lib/site-config'
+import { processStockCodes } from '@/lib/stock-linker'
 
 // Cloudflare Workers 缓存策略
 export const revalidate = 86400 // 24小时缓存
@@ -273,9 +278,12 @@ export default async function PostPage({
                 </time>
                 <span aria-hidden>·</span>
                 <span>{post.view_count} 次阅读</span>
-                <span aria-hidden>·</span>
-                <span>约 {readingMinutes} 分钟</span>
                 <DownloadMarkdown title={post.title} html={post.html} />
+              </div>
+
+              {/* 投票按钮 */}
+              <div className="mt-4">
+                <VoteButtons slug={post.slug} />
               </div>
             </header>
 
@@ -283,9 +291,12 @@ export default async function PostPage({
               id={contentContainerId}
               data-admin-edit-trigger
               className="rich-content"
-              dangerouslySetInnerHTML={{ __html: post.html }}
+              dangerouslySetInnerHTML={{ __html: processStockCodes(post.html) }}
             />
             <TwitterEmbedsEnhancer containerId={contentContainerId} html={post.html} />
+
+            {/* 财经图表渲染 */}
+            <ChartEmbed />
 
             {related.results.length > 0 && (
               <section className="mt-14 sm:mt-16 border-t border-[var(--editor-line)] pt-8 sm:pt-10">
@@ -338,9 +349,15 @@ export default async function PostPage({
                 </div>
               </section>
             )}
+
+            {/* 评论系统 */}
+            <GiscusComments />
           </article>
         </FrontPostAdminBoundary>
       </main>
+
+      {/* 股票代码悬浮提示 */}
+      <StockTooltip />
 
       <SiteFooter />
     </div>

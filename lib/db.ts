@@ -22,6 +22,8 @@ export {
   getPostsCountByCategory,
   getStats,
   incrementViewCount,
+  incrementVotesUp,
+  incrementVotesDown,
   permanentlyDeletePost,
   restorePost,
   updatePost,

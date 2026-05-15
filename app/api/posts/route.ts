@@ -15,6 +15,9 @@ import {
 } from '@/lib/server/route-helpers'
 import type { NextRequest } from 'next/server'
 
+// 区域类型：港股、A股、美股
+type PostRegion = 'HK' | 'A-shares' | 'US'
+
 export async function POST(req: NextRequest) {
   try {
     const route = await getRouteContextWithDb('数据库未配置')
@@ -30,6 +33,7 @@ export async function POST(req: NextRequest) {
     const content = typeof payload.content === 'string' ? payload.content.trim() : ''
     const rawHtml = typeof payload.html === 'string' ? payload.html.trim() : ''
     const payloadCategory = typeof payload.category === 'string' ? payload.category.trim() : ''
+    const payloadRegion = typeof payload.region === 'string' ? payload.region.trim() || undefined : undefined
     const customSlug = typeof payload.slug === 'string' ? normalizePostSlug(payload.slug) : ''
     const status = payload.status === 'draft' ? 'draft' : 'published'
     const password = typeof payload.password === 'string' && payload.password.trim() ? payload.password.trim() : null
@@ -47,6 +51,12 @@ export async function POST(req: NextRequest) {
     const coverImage = typeof payload.cover_image === 'string' && payload.cover_image.trim()
       ? payload.cover_image.trim()
       : null
+
+    // 验证 region 格式
+    const validRegions: PostRegion[] = ['HK', 'A-shares', 'US']
+    const region = payloadRegion && validRegions.includes(payloadRegion as PostRegion)
+      ? (payloadRegion as PostRegion)
+      : undefined
 
     if (!title || !content) {
       return jsonError('标题和内容不能为空', 400)
@@ -74,11 +84,14 @@ export async function POST(req: NextRequest) {
       html: htmlContent,
       description,
       category: payloadCategory || '未分类',
+      region,
       tags,
       status,
       password,
       is_hidden,
       cover_image: coverImage,
+      votes_up: 0,
+      votes_down: 0,
     })
 
     // 6. 清除缓存
@@ -158,6 +171,13 @@ export async function PATCH(req: NextRequest) {
       updates.description = rawDescription || buildAutoDescription(rawContent)
     }
     if (payload.category !== undefined) updates.category = payload.category
+    // 只接受有效的 region 值
+    if (payload.region !== undefined) {
+      const validRegions: ('HK' | 'A-shares' | 'US')[] = ['HK', 'A-shares', 'US']
+      if (validRegions.includes(payload.region as any)) {
+        updates.region = payload.region
+      }
+    }
     if (payload.tags !== undefined) updates.tags = payload.tags
     if (payload.cover_image !== undefined) updates.cover_image = payload.cover_image
     if (payload.status === 'draft' || payload.status === 'published' || payload.status === 'deleted') {
