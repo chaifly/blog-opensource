@@ -86,7 +86,7 @@ strip_array_section() {
 cd "${REPO_ROOT}"
 
 if ! npx wrangler whoami >/dev/null 2>&1; then
-  echo "❌ 未登录 Cloudflare，请先运行: npx wrangler login"
+  echo "锟?鏈櫥锟?Cloudflare锛岃鍏堣繍锟? npx wrangler login"
   exit 1
 fi
 
@@ -100,7 +100,7 @@ fi
 site_url_override="${SITE_URL}" perl -0pi -e 's/NEXT_PUBLIC_SITE_URL = ".*?"/NEXT_PUBLIC_SITE_URL = "$ENV{site_url_override}"/g' "${LOCAL_CONFIG_PATH}"
 
 if ! section_has_key "d1_databases" "database_id" "${LOCAL_CONFIG_PATH}"; then
-  if rg -q '^\[\[d1_databases\]\]' "${LOCAL_CONFIG_PATH}"; then
+  if grep -q '^\[\[d1_databases\]\]' "${LOCAL_CONFIG_PATH}"; then
     strip_array_section "d1_databases" "${LOCAL_CONFIG_PATH}"
   fi
 
@@ -108,53 +108,54 @@ if ! section_has_key "d1_databases" "database_id" "${LOCAL_CONFIG_PATH}"; then
     --binding DB \
     --use-remote \
     --update-config \
-    -c "${LOCAL_CONFIG_PATH}"
+    -c "./wrangler.local.toml"
 fi
 
 if ! section_has_key "r2_buckets" "bucket_name" "${LOCAL_CONFIG_PATH}"; then
-  if rg -q '^\[\[r2_buckets\]\]' "${LOCAL_CONFIG_PATH}"; then
+  if grep -q '^\[\[r2_buckets\]\]' "${LOCAL_CONFIG_PATH}"; then
     strip_array_section "r2_buckets" "${LOCAL_CONFIG_PATH}"
   fi
 
   npx wrangler r2 bucket create "${R2_NAME}" \
     --binding IMAGES \
     --update-config \
-    -c "${LOCAL_CONFIG_PATH}"
+    -c "./wrangler.local.toml"
 fi
 
-if [[ "${WITH_KV}" == "1" ]] && ! rg -q '^\[\[kv_namespaces\]\]' "${LOCAL_CONFIG_PATH}"; then
+if [[ "${WITH_KV}" == "1" ]] && ! grep -q '^\[\[kv_namespaces\]\]' "${LOCAL_CONFIG_PATH}"; then
   npx wrangler kv namespace create "${KV_NAME}" \
     --binding CACHE \
     --update-config \
-    -c "${LOCAL_CONFIG_PATH}"
+    -c "./wrangler.local.toml"
 fi
 
 npx wrangler d1 execute DB \
   --remote \
   --file="${REPO_ROOT}/db/schema.sql" \
-  -c "${LOCAL_CONFIG_PATH}"
+  -c "./wrangler.local.toml"
 
 if [[ -f "${SEED_TEMPLATE_PATH}" ]]; then
   npx wrangler d1 execute DB \
     --remote \
     --file="${SEED_TEMPLATE_PATH}" \
-    -c "${LOCAL_CONFIG_PATH}"
+    -c "./wrangler.local.toml"
 fi
 
 cat <<EOF
-✅ Cloudflare 基础资源初始化完成
+锟?Cloudflare 鍩虹璧勬簮鍒濆鍖栧畬锟?
 
-当前配置文件:
+褰撳墠閰嶇疆鏂囦欢:
   ${LOCAL_CONFIG_PATH}
 
-下一步:
-  1. 配置本地环境变量: cp .env.example .env.local
-  2. 设置线上 secrets:
+涓嬩竴锟?
+  1. 閰嶇疆鏈湴鐜鍙橀噺: cp .env.example .env.local
+  2. 璁剧疆绾夸笂 secrets:
      npx wrangler secret put ADMIN_PASSWORD -c ${LOCAL_CONFIG_PATH}
      npx wrangler secret put ADMIN_TOKEN_SALT -c ${LOCAL_CONFIG_PATH}
      npx wrangler secret put AI_CONFIG_ENCRYPTION_SECRET -c ${LOCAL_CONFIG_PATH}
-     npx wrangler secret put AI_API_KEY -c ${LOCAL_CONFIG_PATH}   # 如果你要启用 AI
-  3. 首次初始化已写入默认主题、字体和导航
-  4. 生成类型: npm run cf-typegen
-  5. 部署: npm run deploy
+     npx wrangler secret put AI_API_KEY -c ${LOCAL_CONFIG_PATH}   # 濡傛灉浣犺鍚敤 AI
+  3. 棣栨鍒濆鍖栧凡鍐欏叆榛樿涓婚銆佸瓧浣撳拰瀵艰埅
+  4. 鐢熸垚绫诲瀷: npm run cf-typegen
+  5. 閮ㄧ讲: npm run deploy
 EOF
+

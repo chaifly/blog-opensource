@@ -40,8 +40,14 @@ npx wrangler login
 ### 3. 自动初始化（推荐）
 
 ```bash
+# 正式部署（域名必填）
 npm run cf:init -- --site-url=https://你的域名.com
+
+# 本地开发测试（可跳过域名）
+npm run cf:init -- --site-url=http://localhost:8788
 ```
+
+> **域名参数说明**： `--site-url` 是可选的，默认值为 `https://your-domain.com`。本地开发可用 localhost，生产部署必须填写真实域名（会影响 RSS、sitemap 等功能的 URL 生成）。
 
 此命令会一键完成：
 - 创建 `wrangler.local.toml`（**本地配置，不要提交到 git**）

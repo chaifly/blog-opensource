@@ -35,7 +35,7 @@
     "gray-matter": "^4.0.3",
     "lucide-react": "^1.8.0",
     "nanoid": "^5.1.7",
-    "next": "16.2.3",
+    "next": "^16.2.6",
     "novel": "^1.0.2",
     "openai": "^6.34.0",
     "react": "19.2.4",

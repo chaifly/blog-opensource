@@ -43,7 +43,7 @@ export function VoteButtons({ slug, initialVotes }: VoteButtonsProps) {
       })
 
       if (response.ok) {
-        const data = await response.json()
+        const data: VoteInfo = await response.json()
         setVotes({ slug, votes_up: data.votes_up, votes_down: data.votes_down })
         setHasVoted(true)
 
