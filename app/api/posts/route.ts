@@ -174,7 +174,7 @@ export async function PATCH(req: NextRequest) {
     // 只接受有效的 region 值
     if (payload.region !== undefined) {
       const validRegions: ('HK' | 'A-shares' | 'US')[] = ['HK', 'A-shares', 'US']
-      if (validRegions.includes(payload.region as any)) {
+      if (validRegions.includes(payload.region as 'HK' | 'A-shares' | 'US')) {
         updates.region = payload.region
       }
     }

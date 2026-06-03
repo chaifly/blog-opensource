@@ -155,7 +155,6 @@ export function HomeDefault({
                           <>
                             <span aria-hidden>·</span>
                             {(() => {
-                              const regionSlug = regionSlugMap[REGION_NAMES[post.region] as string] || post.region
                               return (
                                 <span className="px-2 py-0.5 rounded-full bg-[var(--border-warm)]/50 text-[var(--editor-muted)] border border-[var(--border-warm)]/15 capitalize">
                                   {REGION_NAMES[post.region] || post.region}

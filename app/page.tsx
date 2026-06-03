@@ -1,7 +1,7 @@
 import { getPosts, getPostsCount } from '@/lib/db'
 import { getAppCloudflareEnv } from '@/lib/cloudflare'
 import { type Theme } from '@/lib/appearance'
-import type { SiteCategoryLink, SiteNavLink, SiteCategoryLink as RegionLink } from '@/lib/site'
+import type { SiteCategoryLink, SiteNavLink } from '@/lib/site'
 import { getSiteHeaderData, REGION_CATEGORIES } from '@/lib/site'
 import { HomeClient } from '@/components/HomeClient'
 import { getSiteUrl } from '@/lib/site-config'

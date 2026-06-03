@@ -180,7 +180,7 @@ export default async function PostPage({
 
   // 阅读时间估算（中文按 400 字/分钟）
   const textLength = post.content?.length || 0
-  const readingMinutes = Math.max(1, Math.ceil(textLength / 400))
+  void Math.max(1, Math.ceil(textLength / 400))
   const related = !post.password
     ? await getRelatedPosts(db, env, post, 3).catch(() => ({ strategy: 'fts' as const, source: 'rules' as const, results: [] }))
     : { strategy: 'fts' as const, source: 'rules' as const, results: [] }

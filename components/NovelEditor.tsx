@@ -512,7 +512,7 @@ export function NovelEditor({ initialData }: NovelEditorProps = {}) {
         autosaveAbortRef.current = null
       }
     }
-  }, [abortAutosaveRequest, buildAutosaveSnapshot, draftReady, syncPersistedSlug])
+  }, [abortAutosaveRequest, buildAutosaveSnapshot, draftReady, syncPersistedSlug, region])
 
   // ── Draft save ──
   const scheduleDraftSave = useCallback((
