@@ -23,9 +23,12 @@ service = "qiaomu-blog-opensource"
 
 [[d1_databases]]
 binding = "DB"
+database_name = "qiaomu-blog-db"
+database_id = "0d45a2c5-5397-4049-b89c-26fe74729b91"
 
 [[r2_buckets]]
 binding = "IMAGES"
+bucket_name = "qiaomu-blog-images"
 
 # Optional Queue binding for background jobs. Uncomment after creating the queue.
 # [[queues.producers]]
@@ -36,7 +39,7 @@ binding = "IMAGES"
 # queue = "qiaomu-blog-background-jobs"
 
 [vars]
-NEXT_PUBLIC_SITE_URL = "https://your-domain.com"
+NEXT_PUBLIC_SITE_URL = "https://blog-opensource.pages.dev"
 # Giscus 评论（基于 GitHub Discussions，可选）
 # NEXT_PUBLIC_GISCUS_REPO = "your-username/your-repo"
 # NEXT_PUBLIC_GISCUS_REPO_ID = "your-repo-id"
