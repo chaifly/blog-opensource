@@ -132,8 +132,10 @@ export function ChartEmbed() {
   const [theme, setTheme] = useState(CHART_THEME_COLORS)
 
   useEffect(() => {
+    // detectTheme only runs once on mount to determine initial theme
     const t = detectTheme()
     setTheme(t)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
 
     // 扫描页面中的图表占位符
     const scanCharts = () => {
@@ -170,7 +172,7 @@ export function ChartEmbed() {
     observer.observe(document.body, { childList: true, subtree: true })
 
     return () => observer.disconnect()
-  }, [])
+  }, []) // empty deps = intentional once-only initialization
 
   if (charts.length === 0) return null
 
