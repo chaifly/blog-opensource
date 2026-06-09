@@ -134,8 +134,8 @@ export function ChartEmbed() {
   useEffect(() => {
     // detectTheme only runs once on mount to determine initial theme
     const t = detectTheme()
-    setTheme(t)
     // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTheme(t)
 
     // 扫描页面中的图表占位符
     const scanCharts = () => {
