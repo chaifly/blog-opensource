@@ -36,11 +36,21 @@ jobs:
 
       - name: Deploy to Cloudflare Workers
         run: |
-          # Temporarily rename worker.ts to bypass opennextjs detection
-          # This allows direct wrangler deploy without the CI-incompatible proxy
-          cp worker.ts worker.ts.bak
-          echo 'export default { fetch: () => new Response("ok") }' > worker.ts
+          # Patch opennextjs helpers to skip proxy session check in CI
+          node -e "
+            const fs = require('fs');
+            const path = 'node_modules/@opennextjs/cloudflare/dist/cli/commands/utils/helpers.js';
+            if (fs.existsSync(path)) {
+              let content = fs.readFileSync(path, 'utf8');
+              // Skip the proxy session check which fails in CI
+              content = content.replace(
+                'async function getEnvFromPlatformProxy',
+                'async function getEnvFromPlatformProxy_skip'
+              );
+              fs.writeFileSync(path, content);
+              console.log('Patched helpers.js to skip proxy check');
+            }
+          "
           CLOUDFLARE_ACCOUNT_ID=${{ secrets.CLOUDFLARE_ACCOUNT_ID }} \
           CLOUDFLARE_AUTH_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} \
           ./node_modules/.bin/wrangler deploy --name qiaomu-blog-opensource
-          mv worker.ts.bak worker.ts
