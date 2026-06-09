@@ -39,6 +39,19 @@ jobs:
           CLOUDFLARE_AUTH_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          # Install wrangler globally to bypass opennextjs plugin
-          npm install -g wrangler@4.84.1
-          wrangler deploy --name qiaomu-blog-opensource
+          # Patch helpers.js to return null from getEnvFromPlatformProxy (skip proxy in CI)
+          node -e "
+            const fs = require('fs');
+            const path = 'node_modules/@opennextjs/cloudflare/dist/cli/commands/utils/helpers.js';
+            if (fs.existsSync(path)) {
+              let content = fs.readFileSync(path, 'utf8');
+              // Replace the function body to return null (skip proxy)
+              content = content.replace(
+                /export async function getEnvFromPlatformProxy\(\)[^{]*\{[\s\S]*?\}/,
+                'export async function getEnvFromPlatformProxy() { return null; }'
+              );
+              fs.writeFileSync(path, content);
+              console.log('Patched helpers.js');
+            }
+          "
+          ./node_modules/.bin/wrangler deploy --name qiaomu-blog-opensource
