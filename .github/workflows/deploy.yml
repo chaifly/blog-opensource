@@ -35,22 +35,10 @@ jobs:
           npx opennextjs-cloudflare build
 
       - name: Deploy to Cloudflare Workers
+        env:
+          CLOUDFLARE_AUTH_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          # Patch opennextjs helpers to skip proxy session check in CI
-          node -e "
-            const fs = require('fs');
-            const path = 'node_modules/@opennextjs/cloudflare/dist/cli/commands/utils/helpers.js';
-            if (fs.existsSync(path)) {
-              let content = fs.readFileSync(path, 'utf8');
-              // Skip the proxy session check which fails in CI
-              content = content.replace(
-                'async function getEnvFromPlatformProxy',
-                'async function getEnvFromPlatformProxy_skip'
-              );
-              fs.writeFileSync(path, content);
-              console.log('Patched helpers.js to skip proxy check');
-            }
-          "
-          CLOUDFLARE_ACCOUNT_ID=${{ secrets.CLOUDFLARE_ACCOUNT_ID }} \
-          CLOUDFLARE_AUTH_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} \
-          ./node_modules/.bin/wrangler deploy --name qiaomu-blog-opensource
+          # Install wrangler globally to bypass opennextjs plugin
+          npm install -g wrangler@4.84.1
+          wrangler deploy --name qiaomu-blog-opensource
