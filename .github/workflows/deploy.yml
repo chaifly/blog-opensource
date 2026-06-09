@@ -32,7 +32,6 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           rm -rf .next .open-next
-          npx wrangler login --api-token $CLOUDFLARE_API_TOKEN
           npx opennextjs-cloudflare build
 
       - name: Deploy to Cloudflare Workers
