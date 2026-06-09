@@ -39,6 +39,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          configuration: ./wrangler.toml
-          commands: |
-            npx wrangler deploy ./wrangler.toml --name qiaomu-blog-opensource
+          command: deploy ./wrangler.toml --name qiaomu-blog-opensource
