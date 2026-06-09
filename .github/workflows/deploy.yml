@@ -39,7 +39,6 @@ jobs:
           CLOUDFLARE_AUTH_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          # Rename worker.ts to bypass opennextjs detection, then deploy directly
-          mv worker.ts worker.ts.bak
-          ./node_modules/.bin/wrangler deploy --name qiaomu-blog-opensource --no-bundle
-          mv worker.ts.bak worker.ts
+          # Completely remove opennextjs wrapper directory to prevent interception
+          rm -rf node_modules/@opennextjs/cloudflare/dist/cli
+          ./node_modules/.bin/wrangler deploy --name qiaomu-blog-opensource
