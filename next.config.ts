@@ -2,7 +2,10 @@ import { resolve } from "node:path";
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 import type { NextConfig } from "next";
 
-void initOpenNextCloudflareForDev();
+// 只在本地开发时初始化 Cloudflare 开发服务器 (CI 构建时跳过)
+if (process.env.NODE_ENV !== 'production' && !process.env.CI) {
+  void initOpenNextCloudflareForDev();
+}
 
 const nextConfig: NextConfig = {
   // 图片优化（Cloudflare 有自己的优化）
