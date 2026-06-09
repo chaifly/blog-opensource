@@ -75,9 +75,9 @@ export default async function Home({
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'WebSite',
-            name: '乔木博客',
+            name: '读财报博客',
             url: BASE_URL,
-            description: '记录思考，分享所学，留住当下。港股、A股、美股公司研究的数字花园，AI驱动的投资分析社区。',
+            description: '读财报，学投资。以学习财务知识，解读财报和市场为主要内容，记录投资学习历程。',
             potentialAction: {
               '@type': 'SearchAction',
               target: { '@type': 'EntryPoint', urlTemplate: `${BASE_URL}/search?q={search_term_string}` },
@@ -92,7 +92,7 @@ export default async function Home({
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Organization',
-            name: '乔木博客',
+            name: '读财报博客',
             url: BASE_URL,
             logo: { '@type': 'ImageObject', url: `${BASE_URL}/icon-512.png` },
           }),

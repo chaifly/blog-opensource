@@ -53,7 +53,7 @@ export async function generateMetadata({
     return {
       title: post.title,
       description: post.description,
-      authors: [{ name: '向阳乔木' }],
+      authors: [{ name: '读财报学投资' }],
       alternates: {
         canonical: `${baseUrl}/${post.slug}`,
       },
@@ -63,7 +63,7 @@ export async function generateMetadata({
         type: 'article',
         publishedTime: new Date(post.published_at * 1000).toISOString(),
         modifiedTime: new Date(post.updated_at * 1000).toISOString(),
-        authors: ['向阳乔木'],
+        authors: ['读财报学投资'],
         images: [{ url: ogImage }],
       },
       twitter: {
@@ -207,7 +207,7 @@ export default async function PostPage({
             headline: post.title,
             description: post.description || '',
             image: ogImage,
-            author: { '@type': 'Person', name: '向阳乔木', url: 'https://x.com/vista8' },
+            author: { '@type': 'Person', name: '读财报学投资', url: 'https://x.com/vista8' },
             publisher: { '@type': 'Organization', name: '乔木博客', url: baseUrl, logo: { '@type': 'ImageObject', url: `${baseUrl}/icon-512.png` } },
             datePublished: new Date(post.published_at * 1000).toISOString(),
             dateModified: new Date(post.updated_at * 1000).toISOString(),

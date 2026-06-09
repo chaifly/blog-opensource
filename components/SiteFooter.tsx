@@ -54,13 +54,34 @@ export function SiteFooter() {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-xs text-[var(--stone-gray)]">
           <span>© 2026</span>
           <span>·</span>
+          <Link
+            href="/compliance"
+            className="hover:text-[var(--editor-ink)] transition-colors duration-150 underline-offset-2 hover:underline"
+          >
+            合规
+          </Link>
+          <span>·</span>
+          <Link
+            href="/privacy"
+            className="hover:text-[var(--editor-ink)] transition-colors duration-150 underline-offset-2 hover:underline"
+          >
+            隐私
+          </Link>
+          <span>·</span>
+          <Link
+            href="/about"
+            className="hover:text-[var(--editor-ink)] transition-colors duration-150 underline-offset-2 hover:underline"
+          >
+            关于我们
+          </Link>
+          <span>·</span>
           {isAdmin ? (
             <>
               <Link
                 href="/admin"
                 className="hover:text-[var(--editor-ink)] transition-colors duration-150 underline-offset-2 hover:underline"
               >
-                向阳乔木
+                管理后台
               </Link>
               <span>·</span>
               <Link
@@ -81,7 +102,7 @@ export function SiteFooter() {
               onClick={() => setOpen(true)}
               className="hover:text-[var(--editor-ink)] transition-colors duration-150 underline-offset-2 hover:underline"
             >
-              向阳乔木
+              登录
             </button>
           )}
         </div>

@@ -38,10 +38,10 @@ const SITE_URL = getSiteUrl()
 export const metadata: Metadata = {
   metadataBase: getSiteUrlObject(),
   title: {
-    default: '乔木博客',
-    template: '%s · 乔木博客',
+    default: '读财报博客',
+    template: '%s · 读财报博客',
   },
-  description: '记录思考，分享所学，留住当下。技术、生活、读书笔记的数字花园。',
+  description: '读财报，学投资。以学习财务知识，解读财报和市场为主要内容，记录投资学习历程。',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -62,15 +62,15 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'zh_CN',
     url: SITE_URL,
-    siteName: '乔木博客',
-    title: '乔木博客',
-    description: '记录思考，分享所学，留住当下。技术、生活、读书笔记的数字花园。',
+    siteName: '读财报博客',
+    title: '读财报博客',
+    description: '读财报，学投资。以学习财务知识，解读财报和市场为主要内容，记录投资学习历程。',
     images: [
       {
         url: '/icon-512.png',
         width: 512,
         height: 512,
-        alt: '乔木博客',
+        alt: '读财报博客',
       },
     ],
   },
@@ -78,8 +78,8 @@ export const metadata: Metadata = {
     card: 'summary',
     site: '@vista8',
     creator: '@vista8',
-    title: '乔木博客',
-    description: '记录思考，分享所学，留住当下。技术、生活、读书笔记的数字花园。',
+    title: '读财报博客',
+    description: '读财报，学投资。以学习财务知识，解读财报和市场为主要内容，记录投资学习历程。',
     images: ['/icon-512.png'],
   },
 };

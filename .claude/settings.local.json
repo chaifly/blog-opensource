@@ -6,7 +6,19 @@
       "Bash(npx tsc *)",
       "Bash(./node_modules/.bin/tsc --build --noEmit ./app ./lib)",
       "Bash(npx next *)",
-      "Bash(curl -s http://localhost:3002/)"
+      "Bash(curl -s http://localhost:3002/)",
+      "Bash(npm ls *)",
+      "Bash(git push *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git pull *)",
+      "Bash(git stash *)",
+      "Bash(git rebase *)",
+      "WebFetch(domain:github.com)",
+      "Read(//usr/local/bin/**)",
+      "Read(//opt/homebrew/bin/**)",
+      "Read(//Users/chai/**)",
+      "Bash(brew install *)"
     ]
   }
 }
