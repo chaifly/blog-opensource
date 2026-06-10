@@ -220,5 +220,8 @@ CREATE INDEX idx_api_tokens_token ON api_tokens(token);
 -- 插入默认分类
 INSERT INTO categories (name, slug) VALUES
   ('未分类', 'uncategorized'),
-  ('AI工具', 'ai-tools'),
-  ('AI', 'ai');
+  ('港股', 'hk'),
+  ('A股', 'a-shares'),
+  ('美股', 'us'),
+  ('市场', 'market'),
+  ('思考', 'thoughts');

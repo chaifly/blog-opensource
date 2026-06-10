@@ -34,7 +34,7 @@ function TerminalHeader({
   navLinks: SiteNavLink[]
 }) {
   const defaultLinks = [
-    { label: '~/github', url: 'https://github.com/chaifly/', openInNewTab: true },
+    { label: '~/about', url: '/about', openInNewTab: false },
     { label: '~/twitter', url: 'https://x.com/vista8/', openInNewTab: true },
     { label: '~/rss', url: '/feed.xml', openInNewTab: false },
   ]
