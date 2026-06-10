@@ -208,7 +208,7 @@ export default async function PostPage({
             description: post.description || '',
             image: ogImage,
             author: { '@type': 'Person', name: '读财报学投资', url: 'https://x.com/vista8' },
-            publisher: { '@type': 'Organization', name: '乔木博客', url: baseUrl, logo: { '@type': 'ImageObject', url: `${baseUrl}/icon-512.png` } },
+            publisher: { '@type': 'Organization', name: '读财报博客', url: baseUrl, logo: { '@type': 'ImageObject', url: `${baseUrl}/icon-512.png` } },
             datePublished: new Date(post.published_at * 1000).toISOString(),
             dateModified: new Date(post.updated_at * 1000).toISOString(),
             mainEntityOfPage: { '@type': 'WebPage', '@id': `${baseUrl}/${post.slug}` },
