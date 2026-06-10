@@ -34,13 +34,15 @@ function TerminalHeader({
   navLinks: SiteNavLink[]
 }) {
   const defaultLinks = [
-    { label: '~/github', url: 'https://github.com/joeseesun/', openInNewTab: true },
+    { label: '~/github', url: 'https://github.com/chaifly/', openInNewTab: true },
     { label: '~/twitter', url: 'https://x.com/vista8/', openInNewTab: true },
     { label: '~/rss', url: '/feed.xml', openInNewTab: false },
   ]
-  const links = navLinks.length > 0
+  const sourceLinks = navLinks.length > 0
     ? navLinks.map(l => ({ ...l, label: `~/${l.label.toLowerCase()}` }))
     : defaultLinks
+  // 隐藏 admin 相关链接（不在前端显示）
+  const links = sourceLinks.filter(link => !link.url.includes('/admin') && !link.label.toLowerCase().includes('admin'))
 
   return (
     <div className="terminal-home-header" style={{

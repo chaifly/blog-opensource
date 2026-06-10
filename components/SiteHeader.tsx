@@ -19,7 +19,7 @@ interface SiteHeaderProps {
 }
 
 const defaultNavLinks: NavLink[] = [
-  { label: 'GitHub', url: 'https://github.com/joeseesun/', openInNewTab: true },
+  { label: 'GitHub', url: 'https://github.com/chaifly/', openInNewTab: true },
   { label: 'Twitter', url: 'https://x.com/vista8/', openInNewTab: true },
   { label: 'RSS', url: '/feed.xml', openInNewTab: false },
 ]
@@ -36,7 +36,9 @@ export function SiteHeader({
   stickyOnMobile = true,
   initialTheme = 'default',
 }: SiteHeaderProps) {
-  const links = navLinks && navLinks.length > 0 ? navLinks : defaultNavLinks
+  const sourceLinks = navLinks && navLinks.length > 0 ? navLinks : defaultNavLinks
+  // 隐藏 admin 相关链接（不在前端显示）
+  const links = sourceLinks.filter(link => !link.url.includes('/admin') && !link.label.toLowerCase().includes('admin'))
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [categoryOpen, setCategoryOpen] = useState(false)
   const categoryRef = useRef<HTMLDivElement>(null)

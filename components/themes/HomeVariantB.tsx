@@ -38,11 +38,13 @@ function EditorialNavBar({
   navLinks: SiteNavLink[]
 }) {
   const defaultLinks = [
-    { label: 'GitHub', url: 'https://github.com/joeseesun/', openInNewTab: true },
+    { label: 'GitHub', url: 'https://github.com/chaifly/', openInNewTab: true },
     { label: 'Twitter', url: 'https://x.com/vista8/', openInNewTab: true },
     { label: 'RSS', url: '/feed.xml', openInNewTab: false },
   ]
-  const links = navLinks.length > 0 ? navLinks : defaultLinks
+  const sourceLinks = navLinks.length > 0 ? navLinks : defaultLinks
+  // 隐藏 admin 相关链接（不在前端显示）
+  const links = sourceLinks.filter(link => !link.url.includes('/admin') && !link.label.toLowerCase().includes('admin'))
   const { vol, month, year } = getIssueInfo()
 
   return (
@@ -119,7 +121,7 @@ export function HomeVariantB({
         <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
           <h1 className="editorial-masthead-title" style={{
             margin: 0,
-            fontSize: 'clamp(72px, 12vw, 180px)',
+            fontSize: 'clamp(56px, 9vw, 140px)',
             fontWeight: 900,
             lineHeight: 0.88,
             letterSpacing: '-0.04em',

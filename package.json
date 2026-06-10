@@ -68,9 +68,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joeseesun/qiaomu-blog-opensource.git"
+    "url": "git+https://github.com/chaifly/blog-opensource.git"
   },
-  "homepage": "https://github.com/joeseesun/qiaomu-blog-opensource",
+  "homepage": "https://github.com/chaifly/blog-opensource",
   "bugs": {
     "url": "https://github.com/joeseesun/qiaomu-blog-opensource/issues"
   },
