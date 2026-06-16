@@ -1,5 +1,6 @@
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { QrGrid, type QrPlatform } from '@/components/QrGrid'
 import { getSiteHeaderData } from '@/lib/site'
 import { getAppCloudflareEnv } from '@/lib/cloudflare'
 import type { Theme } from '@/lib/appearance'
@@ -42,7 +43,7 @@ export default async function AboutPage() {
             <h2 className="text-xl font-semibold text-[var(--editor-ink)] mb-4">关于本站 / About This Site</h2>
             <div className="text-sm text-[var(--editor-muted)] leading-relaxed space-y-3">
               <p>「读财报」博客是自媒体「读财报」的自有站点，致力于成为投资者的财报学习助手。我们相信，通过系统性地学习财务报表解读和财务分析方法，普通投资者也能建立起自己的投资分析框架。</p>
-              <p>"读财报学投资" blog is the self-owned site of the WeMedia account "读财报". We are dedicated to becoming a financial report learning assistant for investors. We believe that by systematically learning financial statement interpretation and financial analysis methods, ordinary investors can also build their own investment analysis framework.</p>
+              <p>&quot;读财报学投资&quot; blog is the self-owned site of the WeMedia account &quot;读财报&quot;. We are dedicated to becoming a financial report learning assistant for investors. We believe that by systematically learning financial statement interpretation and financial analysis methods, ordinary investors can also build their own investment analysis framework.</p>
             </div>
           </section>
 
@@ -66,7 +67,7 @@ export default async function AboutPage() {
             <h2 className="text-xl font-semibold text-[var(--editor-ink)] mb-4">免责声明 / Disclaimer</h2>
             <div className="text-sm text-[var(--editor-muted)] leading-relaxed space-y-3">
               <p>本站观点仅代表作者个人见解，不构成投资建议，也不承诺一定正确。投资有风险，入市需谨慎。投资者应根据自身风险承受能力和投资目标做出独立判断。</p>
-              <p>The views on this site represent only the author's personal opinions, do not constitute investment advice, and do not guarantee correctness. Investment involves risk, and caution is advised when entering the market. Investors should make independent judgments based on their own risk tolerance and investment objectives.</p>
+              <p>The views on this site represent only the author&apos;s personal opinions, do not constitute investment advice, and do not guarantee correctness. Investment involves risk, and caution is advised when entering the market. Investors should make independent judgments based on their own risk tolerance and investment objectives.</p>
             </div>
           </section>
 
@@ -74,30 +75,16 @@ export default async function AboutPage() {
             <h2 className="text-xl font-semibold text-[var(--editor-ink)] mb-4">关注我们 / Follow Us</h2>
             <div className="text-sm text-[var(--editor-muted)] leading-relaxed space-y-3">
               <p>欢迎在以下平台关注「读财报」，获取更多投资学习内容：</p>
-              <p>Welcome to follow "读财报" on the following platforms for more investment learning content:</p>
+              <p>Welcome to follow &quot;读财报&quot; on the following platforms for more investment learning content:</p>
             </div>
-            <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {[
+            <QrGrid
+              platforms={[
                 { name: '今日头条', src: '/zmt-jrtt.png', alt: '读财报 今日头条 二维码' },
                 { name: '微信公众号', src: '/zmt-wx.png', alt: '读财报 微信公众号 二维码' },
                 { name: '小红书', src: '/zmt-xhs.png', alt: '读财报 小红书 二维码' },
                 { name: '知乎', src: '/zmt-zhihu.png', alt: '读财报 知乎 二维码' },
-              ].map((platform) => (
-                <div
-                  key={platform.name}
-                  className="flex flex-col items-center p-4 border border-[var(--editor-line)] rounded-xl bg-[var(--background)]"
-                >
-                  <img
-                    src={platform.src}
-                    alt={platform.alt}
-                    loading="lazy"
-                    className="w-full max-w-[160px] aspect-square object-contain"
-                  />
-                  <p className="mt-3 text-sm font-medium text-[var(--editor-ink)]">{platform.name}</p>
-                  <p className="text-xs text-[var(--editor-muted)] mt-1">扫码关注</p>
-                </div>
-              ))}
-            </div>
+              ] satisfies QrPlatform[]}
+            />
           </section>
 
           <section>
