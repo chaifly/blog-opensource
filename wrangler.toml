@@ -39,7 +39,9 @@ bucket_name = "qiaomu-blog-images"
 # queue = "qiaomu-blog-background-jobs"
 
 [vars]
-NEXT_PUBLIC_SITE_URL = "https://blog-opensource.pages.dev"
+# 部署前必须把 NEXT_PUBLIC_SITE_URL 改成你的真实域名。`npm run cf:init` 会自动替换。
+# 如果直接用此值部署，site-config.ts 会检测到占位域名并报错。
+NEXT_PUBLIC_SITE_URL = "https://your-domain.com"
 # Giscus 评论（基于 GitHub Discussions，可选）
 # NEXT_PUBLIC_GISCUS_REPO = "your-username/your-repo"
 # NEXT_PUBLIC_GISCUS_REPO_ID = "your-repo-id"

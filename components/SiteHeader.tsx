@@ -6,6 +6,7 @@ import { Menu, X, ChevronDown } from 'lucide-react'
 import { SearchEntry } from './SearchEntry'
 import { ThemeDropdown } from '@/components/ThemeDropdown'
 import { getClientThemePreference, subscribeToThemeChange, type Theme } from '@/lib/appearance'
+import { getTwitterConfig } from '@/lib/site-config'
 import type { SiteCategoryLink, SiteNavLink } from '@/lib/site'
 
 export type NavLink = SiteNavLink
@@ -18,9 +19,11 @@ interface SiteHeaderProps {
   initialTheme?: Theme
 }
 
+const TWITTER = getTwitterConfig()
+
 const defaultNavLinks: NavLink[] = [
   { label: '关于我们', url: '/about', openInNewTab: false },
-  { label: 'Twitter', url: 'https://x.com/vista8/', openInNewTab: true },
+  ...(TWITTER.url ? [{ label: 'X', url: TWITTER.url, openInNewTab: true } as NavLink] : []),
   { label: 'RSS', url: '/feed.xml', openInNewTab: false },
 ]
 

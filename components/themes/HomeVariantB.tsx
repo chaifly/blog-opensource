@@ -39,7 +39,6 @@ function EditorialNavBar({
 }) {
   const defaultLinks = [
     { label: '关于我们', url: '/about', openInNewTab: false },
-    { label: 'Twitter', url: 'https://x.com/vista8/', openInNewTab: true },
     { label: 'RSS', url: '/feed.xml', openInNewTab: false },
   ]
   const sourceLinks = navLinks.length > 0 ? navLinks : defaultLinks

@@ -76,9 +76,27 @@ export default async function AboutPage() {
               <p>欢迎在以下平台关注「读财报」，获取更多投资学习内容：</p>
               <p>Welcome to follow "读财报" on the following platforms for more investment learning content:</p>
             </div>
-            <div className="mt-4 p-6 border border-dashed border-[var(--editor-line)] rounded-xl text-center text-sm text-[var(--editor-muted)]">
-              <p>社交媒体账号二维码预留区域</p>
-              <p className="text-xs mt-2">Social Media Account QR Code Area</p>
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {[
+                { name: '今日头条', src: '/zmt-jrtt.png', alt: '读财报 今日头条 二维码' },
+                { name: '微信公众号', src: '/zmt-wx.png', alt: '读财报 微信公众号 二维码' },
+                { name: '小红书', src: '/zmt-xhs.png', alt: '读财报 小红书 二维码' },
+                { name: '知乎', src: '/zmt-zhihu.png', alt: '读财报 知乎 二维码' },
+              ].map((platform) => (
+                <div
+                  key={platform.name}
+                  className="flex flex-col items-center p-4 border border-[var(--editor-line)] rounded-xl bg-[var(--background)]"
+                >
+                  <img
+                    src={platform.src}
+                    alt={platform.alt}
+                    loading="lazy"
+                    className="w-full max-w-[160px] aspect-square object-contain"
+                  />
+                  <p className="mt-3 text-sm font-medium text-[var(--editor-ink)]">{platform.name}</p>
+                  <p className="text-xs text-[var(--editor-muted)] mt-1">扫码关注</p>
+                </div>
+              ))}
             </div>
           </section>
 

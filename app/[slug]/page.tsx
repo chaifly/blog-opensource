@@ -16,7 +16,7 @@ import { GiscusComments } from '@/components/GiscusComments'
 import { getSiteHeaderData } from '@/lib/site'
 import { getRelatedPosts } from '@/lib/related-content'
 import { getPublicContentCacheNamespace } from '@/lib/cache'
-import { getSiteUrl } from '@/lib/site-config'
+import { getSiteUrl, getTwitterConfig } from '@/lib/site-config'
 import { processStockCodes } from '@/lib/stock-linker'
 
 // Cloudflare Workers 缓存策略
@@ -66,14 +66,16 @@ export async function generateMetadata({
         authors: ['读财报学投资'],
         images: [{ url: ogImage }],
       },
-      twitter: {
-        card: 'summary_large_image' as const,
-        site: '@vista8',
-        creator: '@vista8',
-        title: post.title,
-        description: post.description || undefined,
-        images: [ogImage],
-      },
+      twitter: (() => {
+        const tc = getTwitterConfig()
+        return {
+          card: 'summary_large_image' as const,
+          ...(tc.handle ? { site: `@${tc.handle}`, creator: `@${tc.handle}` } : {}),
+          title: post.title,
+          description: post.description || undefined,
+          images: [ogImage],
+        }
+      })(),
     }
   } catch {
     return {}
@@ -207,7 +209,10 @@ export default async function PostPage({
             headline: post.title,
             description: post.description || '',
             image: ogImage,
-            author: { '@type': 'Person', name: '读财报学投资', url: 'https://x.com/vista8' },
+            author: (() => {
+              const tc = getTwitterConfig()
+              return { '@type': 'Person', name: '读财报学投资', ...(tc.url ? { url: tc.url } : {}) }
+            })(),
             publisher: { '@type': 'Organization', name: '读财报博客', url: baseUrl, logo: { '@type': 'ImageObject', url: `${baseUrl}/icon-512.png` } },
             datePublished: new Date(post.published_at * 1000).toISOString(),
             dateModified: new Date(post.updated_at * 1000).toISOString(),

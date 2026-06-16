@@ -10,7 +10,7 @@ export function SiteFooter() {
     <>
       <footer className="border-t border-[var(--editor-line)] mt-auto">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-xs text-[var(--stone-gray)]">
-          <span>© 2026</span>
+          <span>© {new Date().getFullYear()}</span>
           <span>·</span>
           <Link
             href="/compliance"

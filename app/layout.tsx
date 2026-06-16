@@ -7,7 +7,7 @@ import { CustomJsInjector } from "@/components/CustomJsInjector";
 import { FONT_CONFIG, THEME_OPTIONS, THEME_STORAGE_KEY, normalizeTheme } from "@/lib/appearance";
 import { getAppCloudflareEnv } from "@/lib/cloudflare";
 import { getSetting } from "@/lib/db";
-import { getSiteUrl, getSiteUrlObject } from "@/lib/site-config";
+import { getSiteUrl, getSiteUrlObject, getTwitterConfig } from "@/lib/site-config";
 
 const geistSans = localFont({
   src: [
@@ -34,6 +34,11 @@ const geistMono = localFont({
 });
 
 const SITE_URL = getSiteUrl()
+const TWITTER = getTwitterConfig()
+
+const twitterCard = TWITTER.handle
+  ? { site: `@${TWITTER.handle}`, creator: `@${TWITTER.handle}` }
+  : {}
 
 export const metadata: Metadata = {
   metadataBase: getSiteUrlObject(),
@@ -76,8 +81,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary',
-    site: '@vista8',
-    creator: '@vista8',
+    ...twitterCard,
     title: '读财报博客',
     description: '读财报，学投资。以学习财务知识，解读财报和市场为主要内容，记录投资学习历程。',
     images: ['/icon-512.png'],

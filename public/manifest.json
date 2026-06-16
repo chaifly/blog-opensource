@@ -1,7 +1,7 @@
 {
   "name": "读财报博客",
   "short_name": "读财报博客",
-  "description": "记录思考，分享所学，留住当下。技术、投资、财务分析记录。",
+  "description": "读财报，学投资。以学习财务知识、解读财报和市场为主要内容，记录投资学习历程。",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
