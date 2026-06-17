@@ -25,61 +25,47 @@ export function HomeDefault({
   initialTheme,
   posts,
   categories,
-  regions,
   navLinks,
   currentPage,
   totalPages,
   categorySlugMap,
-  regionSlugMap,
-  selectedRegion,
+  selectedCategorySlug,
+  basePath = '/',
 }: HomeProps) {
-  // 区域分类筛选
-  const REGION_CATEGORIES = [
-    { name: '港股', slug: 'hk', region: 'HK' },
-    { name: 'A股', slug: 'a-shares', region: 'A-shares' },
-    { name: '美股', slug: 'us', region: 'US' },
-  ]
-
-  // 获取各区域的文章数
-  const regionCounts = regions?.reduce((acc, r) => {
-    acc[r.slug] = r.count
-    return acc
-  }, {} as Record<string, number>) || {}
   return (
     <div className="min-h-full flex flex-col bg-[var(--background)]">
       <SiteHeader
         initialTheme={initialTheme}
         navLinks={navLinks}
-        categories={categories}
+
       />
       <main className="flex-1 mx-auto max-w-3xl w-full px-4 sm:px-6 py-10 sm:py-14">
-        {/* 区域分类筛选 */}
-        {regions && regions.length > 0 && (
+        {/* 文章分类筛选（与卡片上的 category 标签一致） */}
+        {categories.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6">
             <Link
               href="/"
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                !selectedRegion
+                !selectedCategorySlug
                   ? 'bg-[var(--editor-accent)] text-white'
                   : 'bg-[var(--editor-panel)] text-[var(--editor-muted)] hover:bg-[var(--editor-soft)]'
               }`}
             >
               全部
             </Link>
-            {REGION_CATEGORIES.map((region) => {
-              const count = regionCounts[region.slug] || 0
-              const isActive = selectedRegion === region.slug
+            {categories.map((cat) => {
+              const isActive = selectedCategorySlug === cat.slug
               return (
                 <Link
-                  key={region.slug}
-                  href={`/?region=${region.slug}`}
+                  key={cat.slug}
+                  href={`/?category=${cat.slug}`}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                     isActive
                       ? 'bg-[var(--editor-accent)] text-white'
                       : 'bg-[var(--editor-panel)] text-[var(--editor-muted)] hover:bg-[var(--editor-soft)]'
                   }`}
                 >
-                  {region.name} {count > 0 && <span className="ml-1 opacity-70">({count})</span>}
+                  {cat.name}
                 </Link>
               )
             })}
@@ -169,7 +155,7 @@ export function HomeDefault({
                 </article>
               ))}
             </div>
-            <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/" />
+            <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />
           </>
         )}
       </main>

@@ -1,20 +1,18 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useRef, useEffect, useSyncExternalStore } from 'react'
-import { Menu, X, ChevronDown } from 'lucide-react'
+import { useState, useSyncExternalStore } from 'react'
+import { Menu, X } from 'lucide-react'
 import { SearchEntry } from './SearchEntry'
 import { ThemeDropdown } from '@/components/ThemeDropdown'
 import { getClientThemePreference, subscribeToThemeChange, type Theme } from '@/lib/appearance'
 import { getTwitterConfig } from '@/lib/site-config'
-import type { SiteCategoryLink, SiteNavLink } from '@/lib/site'
+import type { SiteNavLink } from '@/lib/site'
 
 export type NavLink = SiteNavLink
 
 interface SiteHeaderProps {
   navLinks?: NavLink[]
-  categories?: SiteCategoryLink[]
-  activeCategorySlug?: string | null
   stickyOnMobile?: boolean
   initialTheme?: Theme
 }
@@ -34,8 +32,6 @@ function getIssueInfo() {
 
 export function SiteHeader({
   navLinks,
-  categories = [],
-  activeCategorySlug = null,
   stickyOnMobile = true,
   initialTheme = 'default',
 }: SiteHeaderProps) {
@@ -43,25 +39,11 @@ export function SiteHeader({
   // 隐藏 admin 相关链接（不在前端显示）
   const links = sourceLinks.filter(link => !link.url.includes('/admin') && !link.label.toLowerCase().includes('admin'))
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [categoryOpen, setCategoryOpen] = useState(false)
-  const categoryRef = useRef<HTMLDivElement>(null)
   const theme = useSyncExternalStore(
     subscribeToThemeChange,
     () => getClientThemePreference(initialTheme),
     () => initialTheme,
   )
-
-  // 点击外部关闭分类下拉
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (categoryRef.current && !categoryRef.current.contains(e.target as Node)) {
-        setCategoryOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
-  const activeCategory = categories.find(c => c.slug === activeCategorySlug)
 
   const renderLink = (link: NavLink, onClick?: () => void) => {
     const className = "text-[var(--editor-muted)] hover:text-[var(--editor-ink)] transition-colors duration-150"
@@ -147,53 +129,6 @@ export function SiteHeader({
 
           {/* Desktop nav */}
           <nav className="hidden sm:flex items-center gap-3 text-sm flex-shrink-0">
-            {/* Category dropdown */}
-            {categories.length > 0 && (
-              <div ref={categoryRef} className="relative">
-                <button
-                  onClick={() => setCategoryOpen(!categoryOpen)}
-                  className={`inline-flex items-center gap-1 transition-colors duration-150 ${
-                    activeCategorySlug
-                      ? 'text-[var(--editor-accent)]'
-                      : 'text-[var(--editor-muted)] hover:text-[var(--editor-ink)]'
-                  }`}
-                >
-                  {activeCategory?.name || '分类'}
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${categoryOpen ? 'rotate-180' : ''}`} />
-                </button>
-
-                {categoryOpen && (
-                  <div className="absolute top-full left-0 mt-2 min-w-[140px] rounded-lg border border-[var(--editor-line)] bg-[var(--background)] shadow-lg py-1 z-50">
-                    <Link
-                      href="/"
-                      onClick={() => setCategoryOpen(false)}
-                      className={`block px-3 py-2 text-sm transition-colors ${
-                        activeCategorySlug === null
-                          ? 'text-[var(--editor-accent)] bg-[var(--editor-accent)]/5 font-medium'
-                          : 'text-[var(--editor-muted)] hover:text-[var(--editor-ink)] hover:bg-[var(--editor-panel)]'
-                      }`}
-                    >
-                      全部文章
-                    </Link>
-                    {categories.map(cat => (
-                      <Link
-                        key={cat.slug}
-                        href={`/category/${cat.slug}`}
-                        onClick={() => setCategoryOpen(false)}
-                        className={`block px-3 py-2 text-sm transition-colors ${
-                          activeCategorySlug === cat.slug
-                            ? 'text-[var(--editor-accent)] bg-[var(--editor-accent)]/5 font-medium'
-                            : 'text-[var(--editor-muted)] hover:text-[var(--editor-ink)] hover:bg-[var(--editor-panel)]'
-                        }`}
-                      >
-                        {cat.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
             {links.map(link => renderLink(link))}
             <ThemeDropdown initialTheme={initialTheme} />
             <SearchEntry />
@@ -221,39 +156,6 @@ export function SiteHeader({
         `}
       >
         <div className="bg-[var(--background)]">
-          {/* Mobile categories as horizontal pills */}
-          {categories.length > 0 && (
-            <div className="px-4 py-3 border-b border-[var(--editor-line)]">
-              <div className="flex flex-wrap gap-2">
-                <Link
-                  href="/"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                    activeCategorySlug === null
-                      ? 'bg-[var(--editor-accent)] text-white'
-                      : 'bg-[var(--editor-panel)] text-[var(--editor-muted)]'
-                  }`}
-                >
-                  全部
-                </Link>
-                {categories.map((category) => (
-                  <Link
-                    key={category.slug}
-                    href={`/category/${category.slug}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                      activeCategorySlug === category.slug
-                        ? 'bg-[var(--editor-accent)] text-white'
-                        : 'bg-[var(--editor-panel)] text-[var(--editor-muted)]'
-                    }`}
-                  >
-                    {category.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-
           <nav className="flex flex-col text-sm">
             {links.map(link => (
               <div key={link.label} className="px-4 py-3 border-b border-[var(--editor-line)]">

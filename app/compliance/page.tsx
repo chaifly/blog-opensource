@@ -11,7 +11,7 @@ export const metadata = {
 
 export default async function CompliancePage() {
   let navLinks = [{ label: '首页', url: '/', openInNewTab: false }]
-  let categories: { name: string; slug: string }[] = []
+
   let defaultTheme: Theme = 'default'
 
   try {
@@ -19,7 +19,7 @@ export default async function CompliancePage() {
     if (env?.DB) {
       const headerData = await getSiteHeaderData(env.DB)
       navLinks = headerData.navLinks
-      categories = headerData.categories
+
       defaultTheme = headerData.defaultTheme
     }
   } catch {}
@@ -29,8 +29,7 @@ export default async function CompliancePage() {
       <SiteHeader
         initialTheme={defaultTheme}
         navLinks={navLinks}
-        categories={categories}
-        activeCategorySlug={null}
+
         stickyOnMobile={false}
       />
 

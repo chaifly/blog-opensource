@@ -41,7 +41,6 @@ function getCatColor(cat: string | null) {
 export function HomeVariantA({
   initialTheme,
   posts,
-  categories,
   navLinks,
   currentPage,
   totalPages,
@@ -53,7 +52,7 @@ export function HomeVariantA({
       <SiteHeader
         initialTheme={initialTheme}
         navLinks={navLinks}
-        categories={categories}
+
       />
 
       <main className="refined-home-main flex-1 mx-auto w-full" style={{ maxWidth: 860, padding: '0 32px 120px' }}>

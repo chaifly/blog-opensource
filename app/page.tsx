@@ -2,7 +2,7 @@ import { getPosts, getPostsCount } from '@/lib/db'
 import { getAppCloudflareEnv } from '@/lib/cloudflare'
 import { type Theme } from '@/lib/appearance'
 import type { SiteCategoryLink, SiteNavLink } from '@/lib/site'
-import { getSiteHeaderData, REGION_CATEGORIES } from '@/lib/site'
+import { getSiteHeaderData } from '@/lib/site'
 import { HomeClient } from '@/components/HomeClient'
 import { getSiteUrl } from '@/lib/site-config'
 
@@ -22,37 +22,45 @@ export const metadata = {
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; region?: string }>
+  searchParams: Promise<{ page?: string; category?: string }>
 }) {
-  const { page: pageStr, region } = await searchParams
+  const { page: pageStr, category: categorySlug } = await searchParams
   const currentPage = Math.max(1, parseInt(pageStr ?? '1', 10) || 1)
 
   let posts: Awaited<ReturnType<typeof getPosts>> = []
   let totalCount = 0
   let navLinks: SiteNavLink[] = []
   let categories: SiteCategoryLink[] = []
-  let regions: { name: string; slug: string; count: number }[] = REGION_CATEGORIES.map(r => ({ name: r.name, slug: r.slug, count: 0 }))
   let defaultTheme: Theme = 'default'
-
-  // 将前端 slug（hk/a-shares/us）映射为数据库 region 值（HK/A-shares/US）
-  const regionSlugToDb: Record<string, string> = {
-    hk: 'HK',
-    'a-shares': 'A-shares',
-    us: 'US',
-  }
-  const dbRegion = region ? regionSlugToDb[region] : undefined
 
   try {
     const env = await getAppCloudflareEnv()
     if (env?.DB) {
       const headerData = await getSiteHeaderData(env.DB)
       ;[posts, totalCount] = await Promise.all([
-        getPosts(env.DB, PAGE_SIZE, (currentPage - 1) * PAGE_SIZE, false, false, false, false, dbRegion),
-        getPostsCount(env.DB, false, false, false, false, dbRegion),
+        getPosts(
+          env.DB,
+          PAGE_SIZE,
+          (currentPage - 1) * PAGE_SIZE,
+          false,
+          false,
+          false,
+          false,
+          undefined,
+          categorySlug ? (headerData.categories.find(c => c.slug === categorySlug)?.name ?? categorySlug) : undefined,
+        ),
+        getPostsCount(
+          env.DB,
+          false,
+          false,
+          false,
+          false,
+          undefined,
+          categorySlug ? (headerData.categories.find(c => c.slug === categorySlug)?.name ?? categorySlug) : undefined,
+        ),
       ])
       navLinks = headerData.navLinks
       categories = headerData.categories
-      regions = headerData.regions || regions
       defaultTheme = headerData.defaultTheme
     }
   } catch (e) {
@@ -63,9 +71,9 @@ export default async function Home({
   const categorySlugMap: Record<string, string> = Object.fromEntries(
     categories.map((cat) => [cat.name, cat.slug])
   )
-  const regionSlugMap: Record<string, string> = Object.fromEntries(
-    regions.map((r) => [r.name, r.slug])
-  )
+
+  // 分页 basePath：选中分类时带 ?category=<slug>，否则为 /
+  const basePath = categorySlug ? `/?category=${categorySlug}` : '/'
 
   return (
     <>
@@ -102,13 +110,12 @@ export default async function Home({
         initialTheme={defaultTheme}
         posts={posts}
         categories={categories}
-        regions={regions}
         navLinks={navLinks}
         currentPage={currentPage}
         totalPages={totalPages}
         categorySlugMap={categorySlugMap}
-        regionSlugMap={regionSlugMap}
-        selectedRegion={region || undefined}
+        selectedCategorySlug={categorySlug ?? null}
+        basePath={basePath}
       />
     </>
   )

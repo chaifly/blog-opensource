@@ -56,7 +56,7 @@ export default async function SearchPage({
       <SiteHeader
         initialTheme={defaultTheme}
         navLinks={navLinks}
-        categories={categories}
+
       />
 
       <main className="page-main flex-1 mx-auto max-w-3xl w-full px-4 sm:px-6 py-10 sm:py-14">

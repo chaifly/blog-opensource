@@ -120,8 +120,7 @@ export default async function PostPage({
           <SiteHeader
             initialTheme={headerData.defaultTheme}
             navLinks={headerData.navLinks}
-            categories={headerData.categories}
-            activeCategorySlug={activeCategorySlug}
+
             stickyOnMobile={false}
           />
           <main className="page-main mx-auto w-full max-w-3xl px-4 sm:px-6 flex-1 py-8 sm:py-12">
@@ -152,8 +151,7 @@ export default async function PostPage({
           <SiteHeader
             initialTheme={headerData.defaultTheme}
             navLinks={headerData.navLinks}
-            categories={headerData.categories}
-            activeCategorySlug={activeCategorySlug}
+
             stickyOnMobile={false}
           />
           <main className="page-main mx-auto w-full max-w-3xl px-4 sm:px-6 flex-1 py-8 sm:py-12">
@@ -193,8 +191,7 @@ export default async function PostPage({
       <SiteHeader
         initialTheme={headerData.defaultTheme}
         navLinks={headerData.navLinks}
-        categories={headerData.categories}
-        activeCategorySlug={activeCategorySlug}
+
         stickyOnMobile={false}
       />
 

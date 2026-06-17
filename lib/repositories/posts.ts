@@ -20,6 +20,7 @@ export async function getPosts(
   includeHidden = false,
   includeDeleted = false,
   region?: string,
+  category?: string,
 ): Promise<PostWithTags[]> {
   await ensureSchema(db)
   const conditions: string[] = []
@@ -38,6 +39,9 @@ export async function getPosts(
   if (region) {
     conditions.push('region = ?')
   }
+  if (category) {
+    conditions.push('category = ?')
+  }
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
 
   const stmt = db
@@ -52,6 +56,7 @@ export async function getPosts(
 
   const bindParams: unknown[] = []
   if (region) bindParams.push(region)
+  if (category) bindParams.push(category)
   bindParams.push(limit, offset)
 
   const { results } = await stmt.bind(...bindParams).all<Post>()
@@ -404,6 +409,7 @@ export async function getPostsCount(
   includeHidden = false,
   includeDeleted = false,
   region?: string,
+  category?: string,
 ): Promise<number> {
   await ensureSchema(db)
   const conditions: string[] = []
@@ -422,10 +428,16 @@ export async function getPostsCount(
   if (region) {
     conditions.push('region = ?')
   }
+  if (category) {
+    conditions.push('category = ?')
+  }
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
   const sql = `SELECT COUNT(*) as count FROM posts ${where}`
-  const result = region
-    ? await db.prepare(sql).bind(region).first<CountRow>()
+  const bindParams: unknown[] = []
+  if (region) bindParams.push(region)
+  if (category) bindParams.push(category)
+  const result = bindParams.length > 0
+    ? await db.prepare(sql).bind(...bindParams).first<CountRow>()
     : await db.prepare(sql).first<CountRow>()
   return (result?.count as number) ?? 0
 }

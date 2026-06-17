@@ -13,13 +13,12 @@ export interface HomeProps {
   initialTheme: Theme
   posts: PostWithTags[]
   categories: SiteCategoryLink[]
-  regions: { name: string; slug: string; count: number }[]
   navLinks: SiteNavLink[]
   currentPage: number
   totalPages: number
   categorySlugMap: Record<string, string>
-  regionSlugMap: Record<string, string>
-  selectedRegion?: string
+  selectedCategorySlug?: string | null
+  basePath?: string
 }
 
 const HomeVariantA = dynamic<HomeProps>(() =>
