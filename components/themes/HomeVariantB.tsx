@@ -209,28 +209,47 @@ export function HomeVariantB({
                 </div>
               </div>
 
-              {/* Decorative block */}
+              {/* 题图：有 cover_image 就用，没有就用 dcb-logo 兜底 */}
               <div className="editorial-featured-art" style={{
-                width: 200,
+                width: 220,
                 aspectRatio: '4/5',
-                background: `repeating-linear-gradient(45deg, ${BORDER} 0, ${BORDER} 1px, transparent 1px, transparent 10px)`,
+                background: '#ffffff',
                 border: `1px solid ${BORDER}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
+                overflow: 'hidden',
+                position: 'relative',
               }}>
-                <div style={{
-                  fontSize: 'clamp(32px, 5vw, 60px)',
-                  fontWeight: 900,
-                  color: ACCENT,
-                  fontFamily: '"Noto Serif SC", serif',
-                  letterSpacing: '-0.05em',
-                  lineHeight: 0.9,
-                  textAlign: 'center',
-                }}>
-                  AI<br />·
-                </div>
+                <img
+                  src={featured.cover_image || '/dcb-logo.jpg'}
+                  alt={featured.title}
+                  loading="lazy"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain',
+                    display: 'block',
+                  }}
+                />
+                {!featured.cover_image && (
+                  <span style={{
+                    position: 'absolute',
+                    bottom: 8,
+                    left: 0,
+                    right: 0,
+                    textAlign: 'center',
+                    fontSize: 10,
+                    letterSpacing: '0.15em',
+                    color: MUTED,
+                    fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+                  }}>
+                    读财报 · dcb
+                  </span>
+                )}
               </div>
             </div>
           </Link>
@@ -363,7 +382,7 @@ export function HomeVariantB({
         letterSpacing: '0.1em',
       }}>
         <span>© {new Date().getFullYear()} 读财报博客</span>
-        <span>独立 · 不商业化 · RSS 友好</span>
+        <span>一起慢慢变富！</span>
       </div>
 
       {/* Standard footer with admin entry */}
