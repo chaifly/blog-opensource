@@ -40,4 +40,4 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           OPEN_NEXT_DEPLOY: "true"
         run: |
-          ./node_modules/.bin/wrangler deploy --name qiaomu-blog-opensource
+          ./node_modules/.bin/wrangler deploy --name dcb-blog-opensource

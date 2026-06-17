@@ -1,4 +1,4 @@
-name = "qiaomu-blog-opensource"
+name = "dcb-blog-opensource"
 main = "worker.ts"
 compatibility_date = "2026-04-14"
 compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
@@ -15,7 +15,7 @@ binding = "WORKERS_AI"
 
 [[services]]
 binding = "WORKER_SELF_REFERENCE"
-service = "qiaomu-blog-opensource"
+service = "dcb-blog-opensource"
 
 # Minimal resource bindings for open-source / Deploy to Cloudflare usage.
 # Modern Wrangler and Deploy buttons can auto-provision these resources.
@@ -23,20 +23,20 @@ service = "qiaomu-blog-opensource"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "qiaomu-blog-db"
+database_name = "dcb-blog-db"
 database_id = "0d45a2c5-5397-4049-b89c-26fe74729b91"
 
 [[r2_buckets]]
 binding = "IMAGES"
-bucket_name = "qiaomu-blog-images"
+bucket_name = "dcb-blog-images"
 
 # Optional Queue binding for background jobs. Uncomment after creating the queue.
 # [[queues.producers]]
 # binding = "BACKGROUND_QUEUE"
-# queue = "qiaomu-blog-background-jobs"
+# queue = "dcb-blog-background-jobs"
 #
 # [[queues.consumers]]
-# queue = "qiaomu-blog-background-jobs"
+# queue = "dcb-blog-background-jobs"
 
 [vars]
 # 部署前必须把 NEXT_PUBLIC_SITE_URL 改成你的真实域名。`npm run cf:init` 会自动替换。
