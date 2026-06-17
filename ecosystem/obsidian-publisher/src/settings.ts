@@ -7,7 +7,7 @@ export interface QmblogSettings {
 }
 
 export const DEFAULT_SETTINGS: QmblogSettings = {
-  apiUrl: "https://your-domain.com",
+  apiUrl: "https://ducaibao.ink",
   apiToken: "",
 };
 
@@ -39,7 +39,7 @@ export class QmblogSettingTab extends PluginSettingTab {
       .setDesc("你的博客地址")
       .addText((text) =>
         text
-          .setPlaceholder("https://your-domain.com")
+          .setPlaceholder("https://ducaibao.ink")
           .setValue(this.plugin.settings.apiUrl)
           .onChange(async (value) => {
             this.plugin.settings.apiUrl = value.trim().replace(/\/+$/, "");

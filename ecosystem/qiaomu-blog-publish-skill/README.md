@@ -35,7 +35,7 @@ export QIAOMU_BLOG_API_TOKEN="qm_xxx"
 
 ```json
 {
-  "apiUrl": "https://your-domain.com",
+  "apiUrl": "https://ducaibao.ink",
   "token": "qm_xxx"
 }
 ```

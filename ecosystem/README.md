@@ -13,6 +13,6 @@
 这三个工具都通过博客后台生成的 `API Token` 访问你的站点：
 
 - 后台路径：`/admin/settings`
-- 站点地址示例：`https://your-domain.com`
+- 站点地址示例：`https://ducaibao.ink`
 
 这个公开仓库里的版本已经去掉了默认绑定私有站点的配置。

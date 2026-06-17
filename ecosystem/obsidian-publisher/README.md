@@ -33,7 +33,7 @@ npm run build
 ## 配置
 
 1. 打开 Obsidian 设置 > 第三方插件 > Qiaomu Blog Publisher
-2. 填写 API 地址（默认 `https://your-domain.com`）
+2. 填写 API 地址（默认 `https://ducaibao.ink`）
 3. 填写 API Token（在你的博客后台获取）
 
 ## 使用

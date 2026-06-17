@@ -26,7 +26,7 @@ user_invocable: true
 
 ## 配置
 
-**API Base URL:** `https://your-domain.com`
+**API Base URL:** `https://ducaibao.ink`
 
 **Token 读取优先级：**
 
@@ -36,13 +36,13 @@ user_invocable: true
 
 如果没有 token，提示用户：
 
-1. 打开 `https://your-domain.com/admin/settings`
+1. 打开 `https://ducaibao.ink/admin/settings`
 2. 在 `API Token` 页面生成 token
 3. 保存到：
 
 ```json
 {
-  "apiUrl": "https://your-domain.com",
+  "apiUrl": "https://ducaibao.ink",
   "token": "qm_xxx"
 }
 ```
@@ -62,7 +62,7 @@ user_invocable: true
 ### 3. 拉取分类
 
 ```bash
-curl -s "https://your-domain.com/api/admin/categories" \
+curl -s "https://ducaibao.ink/api/admin/categories" \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -93,7 +93,7 @@ curl -s "https://your-domain.com/api/admin/categories" \
 上传接口：
 
 ```bash
-curl -s -X POST "https://your-domain.com/api/uploads" \
+curl -s -X POST "https://ducaibao.ink/api/uploads" \
   -H "Authorization: Bearer $TOKEN" \
   -F "file=@/absolute/path/to/file"
 ```
@@ -123,7 +123,7 @@ curl -s -X POST "https://your-domain.com/api/uploads" \
 ### 8. 发布
 
 ```bash
-curl -s -X POST "https://your-domain.com/api/posts" \
+curl -s -X POST "https://ducaibao.ink/api/posts" \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -142,8 +142,8 @@ Published successfully!
 Title: xxx
 Status: draft
 Category: xxx
-Edit: https://your-domain.com/editor?slug=2026-04-16-abc123
-View: https://your-domain.com/posts/2026-04-16-abc123
+Edit: https://ducaibao.ink/editor?slug=2026-04-16-abc123
+View: https://ducaibao.ink/posts/2026-04-16-abc123
 Files: Uploaded N files
 ```
 

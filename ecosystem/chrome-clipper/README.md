@@ -23,7 +23,7 @@
 1. 点击扩展图标
 2. 首次使用会自动进入设置页面
 3. 填写：
-   - **API URL**: `https://your-domain.com`（你的博客地址）
+   - **API URL**: `https://ducaibao.ink`（你的博客地址）
    - **API Token**: 后台生成的 API Token
 4. 点击保存
 

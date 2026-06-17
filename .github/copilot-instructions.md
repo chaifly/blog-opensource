@@ -112,7 +112,7 @@
 
 ## 品牌资产
 
-- **域名**：blog.qiaomu.ai
+- **域名**：ducaibao.ink
 - **X (Twitter)**：[@vista8](https://x.com/vista8)
 - **微信公众号**：向阳乔木推荐看
 - **GitHub**：[@joeseesun](https://github.com/joeseesun)

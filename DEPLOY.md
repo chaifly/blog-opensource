@@ -28,7 +28,7 @@ cp .env.example .env.local
 ADMIN_PASSWORD=你的后台密码
 ADMIN_TOKEN_SALT=openssl rand -hex 32 生成的随机串
 AI_CONFIG_ENCRYPTION_SECRET=openssl rand -hex 32 生成的随机串
-NEXT_PUBLIC_SITE_URL=https://你的域名.com
+NEXT_PUBLIC_SITE_URL=https://ducaibao.ink
 ```
 
 ### 2. 登录 Cloudflare
@@ -41,13 +41,13 @@ npx wrangler login
 
 ```bash
 # 正式部署（域名必填）
-npm run cf:init -- --site-url=https://你的域名.com
+npm run cf:init -- --site-url=https://ducaibao.ink
 
 # 本地开发测试（可跳过域名）
 npm run cf:init -- --site-url=http://localhost:8788
 ```
 
-> **域名参数说明**： `--site-url` 是可选的，默认值为 `https://your-domain.com`。本地开发可用 localhost，生产部署必须填写真实域名（会影响 RSS、sitemap 等功能的 URL 生成）。
+> **域名参数说明**： `--site-url` 是可选的，默认值为 `https://ducaibao.ink`。本地开发可用 localhost，生产部署必须填写真实域名（会影响 RSS、sitemap 等功能的 URL 生成）。
 
 此命令会一键完成：
 - 创建 `wrangler.local.toml`（**本地配置，不要提交到 git**）
@@ -59,7 +59,7 @@ npm run cf:init -- --site-url=http://localhost:8788
 如需启用 KV 缓存加速：
 
 ```bash
-npm run cf:init -- --site-url=https://你的域名.com --with-kv
+npm run cf:init -- --site-url=https://ducaibao.ink --with-kv
 ```
 
 ### 4. 数据库迁移
