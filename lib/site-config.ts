@@ -27,27 +27,37 @@ function isPlaceholderHostname(hostname: string): boolean {
 
 export function getSiteUrl(): string {
   const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim()
+  // 区分 build 阶段和运行时：build 时 NEXT_PHASE=phase-production-build，宽松处理，让 CI 编译能过；
+  // 运行时（Cloudflare Workers 接到请求时）再严格校验，配置错了会 5xx 并给出明确报错。
+  const isBuild = process.env.NEXT_PHASE === 'phase-production-build'
+  const isProdRuntime = process.env.NODE_ENV === 'production' && !isBuild
 
   if (configured) {
     const parsed = parseSiteUrl(configured)
     if (parsed) {
       const hostname = parsed.hostname.toLowerCase()
-      const isInvalidProductionHost =
-        process.env.NODE_ENV === 'production' &&
-        (isLocalHostname(hostname) || isPlaceholderHostname(hostname))
+      const isInvalidHost = isLocalHostname(hostname) || isPlaceholderHostname(hostname)
+      const rejectInRuntime = isProdRuntime && isInvalidHost
 
-      if (!isInvalidProductionHost) {
+      if (!rejectInRuntime) {
+        if (isBuild && isInvalidHost) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            `[site-config] Building with placeholder/local NEXT_PUBLIC_SITE_URL="${configured}". ` +
+            `Runtime must be set to your real production domain.`,
+          )
+        }
         return parsed.toString().replace(/\/$/, '')
       }
     }
   }
 
-  if (process.env.NODE_ENV !== 'production') {
+  // dev / build / 没设 env 变量：退回 localhost，不阻塞构建
+  if (!isProdRuntime) {
     return DEV_SITE_URL
   }
 
-  // 生产环境必须显式设置站点 URL；未设置或用了占位域名都抛错，
-  // 避免 sitemap / RSS / OG 静默指向错误域名。
+  // 生产运行时：未配置或用了占位域名 → 抛错，避免 sitemap / RSS / OG 静默指向错误域名
   const reason = !configured
     ? 'NEXT_PUBLIC_SITE_URL is not set'
     : `NEXT_PUBLIC_SITE_URL is set to a placeholder value: \"${configured}\"`
