@@ -27,8 +27,9 @@ function isPlaceholderHostname(hostname: string): boolean {
 
 export function getSiteUrl(): string {
   const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim()
-  // 区分 build 阶段和运行时：build 时 NEXT_PHASE=phase-production-build，宽松处理，让 CI 编译能过；
-  // 运行时（Cloudflare Workers 接到请求时）再严格校验，配置错了会 5xx 并给出明确报错。
+  // build 时 NEXT_PHASE=phase-production-build 宽松处理（让 CI 编译过）；
+  // 运行时如果还是占位/未配置，不再抛 5xx，而是打 console.error 让用户从日志里看到，
+  // 同时返回一个能用但可能不正确的 URL，避免整个站点崩溃。
   const isBuild = process.env.NEXT_PHASE === 'phase-production-build'
   const isProdRuntime = process.env.NODE_ENV === 'production' && !isBuild
 
@@ -37,33 +38,38 @@ export function getSiteUrl(): string {
     if (parsed) {
       const hostname = parsed.hostname.toLowerCase()
       const isInvalidHost = isLocalHostname(hostname) || isPlaceholderHostname(hostname)
-      const rejectInRuntime = isProdRuntime && isInvalidHost
+      const shouldWarn = isInvalidHost && (isBuild || isProdRuntime)
 
-      if (!rejectInRuntime) {
-        if (isBuild && isInvalidHost) {
-          // eslint-disable-next-line no-console
-          console.warn(
-            `[site-config] Building with placeholder/local NEXT_PUBLIC_SITE_URL="${configured}". ` +
-            `Runtime must be set to your real production domain.`,
-          )
-        }
-        return parsed.toString().replace(/\/$/, '')
+      if (shouldWarn) {
+        // eslint-disable-next-line no-console
+        console[isBuild ? 'warn' : 'error'](
+          `[site-config] NEXT_PUBLIC_SITE_URL="${configured}" is a placeholder/local value. ` +
+          `Set the real production domain in Cloudflare Workers → Settings → Variables (or wrangler.toml [vars]). ` +
+          `Sitemap / RSS / OG tags will reference this value until then.`,
+        )
       }
+      return parsed.toString().replace(/\/$/, '')
     }
-  }
 
-  // dev / build / 没设 env 变量：退回 localhost，不阻塞构建
-  if (!isProdRuntime) {
+    // 配置了但 parse 失败（不是合法 URL）：退回 localhost 并打日志
+    // eslint-disable-next-line no-console
+    if (isProdRuntime) {
+      console.error(
+        `[site-config] NEXT_PUBLIC_SITE_URL="${configured}" is not a valid URL. Falling back to ${DEV_SITE_URL}.`,
+      )
+    }
     return DEV_SITE_URL
   }
 
-  // 生产运行时：未配置或用了占位域名 → 抛错，避免 sitemap / RSS / OG 静默指向错误域名
-  const reason = !configured
-    ? 'NEXT_PUBLIC_SITE_URL is not set'
-    : `NEXT_PUBLIC_SITE_URL is set to a placeholder value: \"${configured}\"`
-  throw new Error(
-    `${reason}. Set it to your real production domain (e.g., https://blog.example.com) before deploying. See DEPLOY.md for details.`,
-  )
+  // 未配置：退回 localhost
+  if (isProdRuntime) {
+    // eslint-disable-next-line no-console
+    console.error(
+      `[site-config] NEXT_PUBLIC_SITE_URL is not set. Falling back to ${DEV_SITE_URL}. ` +
+      `Set the real production domain in Cloudflare Workers → Settings → Variables.`,
+    )
+  }
+  return DEV_SITE_URL
 }
 
 export interface TwitterConfig {
